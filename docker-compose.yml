@@ -1,0 +1,37 @@
+services:
+
+  node1:
+    build: .
+    environment:
+      - NODE_ID=1
+      - PORT=5001
+      - PEERS=node2:5002,node3:5003,node4:5004
+    ports:
+      - "5001:5001"
+
+  node2:
+    build: .
+    environment:
+      - NODE_ID=2
+      - PORT=5002
+      - PEERS=node1:5001,node3:5003,node4:5004
+    ports:
+      - "5002:5002"
+
+  node3:
+    build: .
+    environment:
+      - NODE_ID=3
+      - PORT=5003
+      - PEERS=node1:5001,node2:5002,node4:5004
+    ports:
+      - "5003:5003"
+
+  node4:
+    build: .
+    environment:
+      - NODE_ID=4
+      - PORT=5004
+      - PEERS=node1:5001,node2:5002,node3:5003
+    ports:
+      - "5004:5004"

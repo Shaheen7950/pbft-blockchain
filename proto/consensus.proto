@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package consensus;
+
+option go_package = "pbft/proto";
+
+service ConsensusService {
+  rpc SendMessage (ConsensusMessage) returns (Ack);
+}
+
+message ConsensusMessage {
+  string type = 1;
+  uint32 view = 2;
+  uint32 sequence = 3;
+  string block_hash = 4;
+  string sender = 5;
+}
+
+message Ack {
+  bool success = 1;
+}

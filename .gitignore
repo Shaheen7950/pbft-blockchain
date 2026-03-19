@@ -1,0 +1,19 @@
+# Go build files
+bin/
+*.exe
+*.out
+
+# Go modules cache
+/pkg/
+
+# OS files
+.DS_Store
+
+# Logs
+*.log
+
+# Docker
+*.tar
+
+# Generated protobuf files (optional)
+# proto/*.pb.go
