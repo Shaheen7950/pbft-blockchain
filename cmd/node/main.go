@@ -8,19 +8,16 @@ import (
 	"time"
 
 	"google.golang.org/grpc"
-
 	"pbft/internal/consensus"
 	"pbft/internal/network"
 	pb "pbft/proto"
 )
 
 func main() {
-
 	// ---------------- ENV ----------------
 	id := os.Getenv("NODE_ID")
 	port := os.Getenv("PORT")
 	peerEnv := os.Getenv("PEERS")
-
 	peers := []string{}
 	if peerEnv != "" {
 		peers = strings.Split(peerEnv, ",")
@@ -41,41 +38,42 @@ func main() {
 	}
 
 	// ---------------- PBFT ENGINE ----------------
-	engine := consensus.NewPBFT(id, peers, nodeWeights, malicious)
+	engine := consensus.NewPBFT(id, peers, nodeWeights, malicious, "1")
 
 	// ---------------- SERVER ----------------
 	lis, err := net.Listen("tcp", ":"+port)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	grpcServer := grpc.NewServer()
-
 	pb.RegisterConsensusServiceServer(
 		grpcServer,
 		&network.Server{Engine: engine},
 	)
-
 	log.Println("Node", id, "listening on", port)
 
 	// ---------------- LEADER LOGIC ----------------
 	go func() {
-
 		time.Sleep(5 * time.Second)
-
 		if id == "1" {
-
 			// -------- TRANSACTION 1 --------
 			log.Println("Transaction 1: Normal")
 			engine.BroadcastPrePrepare("block123", 1)
-
 			time.Sleep(6 * time.Second)
+
+			engine.Mutex.Lock()
+			log.Printf("[Weights after T1] %v", engine.Weights)
+			engine.Mutex.Unlock()
 
 			// -------- TRANSACTION 2 --------
 			log.Println("Transaction 2: Malicious Scenario")
 			engine.BroadcastPrePrepare("block456", 2)
-		}
+			time.Sleep(6 * time.Second)
 
+			engine.Mutex.Lock()
+			log.Printf("[Weights after T2] %v", engine.Weights)
+			engine.Mutex.Unlock()
+		}
 	}()
 
 	// ---------------- START SERVER ----------------
