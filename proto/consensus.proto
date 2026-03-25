@@ -1,21 +1,35 @@
 syntax = "proto3";
 
-package consensus;
-
-option go_package = "pbft/proto";
-
-service ConsensusService {
-  rpc SendMessage (ConsensusMessage) returns (Ack);
-}
+package proto;
+option go_package = "./proto";
 
 message ConsensusMessage {
-  string type = 1;
-  uint32 view = 2;
-  uint32 sequence = 3;
-  string block_hash = 4;
-  string sender = 5;
+    string type = 1;
+    uint32 view = 2;
+    uint32 sequence = 3;
+    string block_hash = 4;
+    string sender = 5;
+
+    // --- BLS FIELDS ---
+    int64 signature = 6;
+    repeated string signers = 7;
 }
 
-message Ack {
-  bool success = 1;
+// --- NEW TRANSACTION FIELDS ---
+message Transaction {
+    string client_id = 1;
+    string receiver_id = 2;
+    int32 amount = 3;
+}
+
+message TxAck {
+    bool success = 1;
+    string message = 2;
+}
+
+message Empty {}
+
+service ConsensusService {
+    rpc SendMessage (ConsensusMessage) returns (Empty);
+    rpc SubmitTransaction (Transaction) returns (TxAck);
 }

@@ -1,37 +1,16 @@
 services:
-
-  node1:
-    build: .
-    environment:
-      - NODE_ID=1
-      - PORT=5001
-      - PEERS=node2:5002,node3:5003,node4:5004
-    ports:
-      - "5001:5001"
-
-  node2:
-    build: .
-    environment:
-      - NODE_ID=2
-      - PORT=5002
-      - PEERS=node1:5001,node3:5003,node4:5004
-    ports:
-      - "5002:5002"
-
-  node3:
-    build: .
-    environment:
-      - NODE_ID=3
-      - PORT=5003
-      - PEERS=node1:5001,node2:5002,node4:5004
-    ports:
-      - "5003:5003"
-
-  node4:
-    build: .
-    environment:
-      - NODE_ID=4
-      - PORT=5004
-      - PEERS=node1:5001,node2:5002,node3:5003
-    ports:
-      - "5004:5004"
+  node1: { build: ., environment: [NODE_ID=1, PORT=5001], ports: ["5001:5001"] }
+  node2: { build: ., environment: [NODE_ID=2, PORT=5002], ports: ["5002:5002"] }
+  node3: { build: ., environment: [NODE_ID=3, PORT=5003] }
+  node4: { build: ., environment: [NODE_ID=4, PORT=5004] }
+  node5: { build: ., environment: [NODE_ID=5, PORT=5005] }
+  node6: { build: ., environment: [NODE_ID=6, PORT=5006] }
+  node7: { build: ., environment: [NODE_ID=7, PORT=5007] }
+  node8: { build: ., environment: [NODE_ID=8, PORT=5008] }
+  node9: { build: ., environment: [NODE_ID=9, PORT=5009] }
+  node10: { build: ., environment: [NODE_ID=10, PORT=5010] }
+  node11: { build: ., environment: [NODE_ID=11, PORT=5011] }
+  node12: { build: ., environment: [NODE_ID=12, PORT=5012] }
+  node13: { build: ., environment: [NODE_ID=13, PORT=5013] }
+  node14: { build: ., environment: [NODE_ID=14, PORT=5014] }
+  node15: { build: ., environment: [NODE_ID=15, PORT=5015] }
